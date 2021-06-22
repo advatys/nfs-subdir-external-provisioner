@@ -14,7 +14,7 @@ allowHostPorts: false
 allowPrivilegeEscalation: false
 allowPrivilegedContainer: false
 allowedCapabilities: null
-
+priority: 10
 defaultAddCapabilities: null
 fsGroup:
   type: RunAsAny
