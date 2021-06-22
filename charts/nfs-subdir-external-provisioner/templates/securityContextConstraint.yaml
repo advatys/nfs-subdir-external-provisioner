@@ -1,0 +1,62 @@
+{{- if .Values.securityContextConstraints.enabled }}
+apiVersion: security.openshift.io/v1
+kind: SecurityContextConstraints
+metadata:
+  name: {{ template "nfs-subdir-external-provisioner.fullname" . }}
+  labels:
+    {{- include "nfs-subdir-external-provisioner.labels" . | nindent 4 }}
+
+allowHostDirVolumePlugin: true
+allowHostIPC: false
+allowHostNetwork: false
+allowHostPID: false
+allowHostPorts: false
+allowPrivilegeEscalation: false
+allowPrivilegedContainer: false
+allowedCapabilities: null
+
+defaultAddCapabilities: null
+fsGroup:
+  type: RunAsAny
+
+readOnlyRootFilesystem: false
+requiredDropCapabilities:
+- ALL
+runAsUser:
+  type: RunAsAny
+seLinuxContext:
+  type: MustRunAs
+supplementalGroups:
+  type: RunAsAny
+
+volumes:
+- nfs
+- secret
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ template "nfs-subdir-external-provisioner.fullname" . }}-scc-use
+rules:
+- apiGroups:
+    - security.openshift.io
+  resourceNames:
+    - {{ template "nfs-subdir-external-provisioner.fullname" . }}
+  resources:
+    - securitycontextconstraints
+  verbs:
+    - use
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ template "nfs-subdir-external-provisioner.fullname" . }}-scc-use
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ template "nfs-subdir-external-provisioner.fullname" . }}
+subjects:
+- kind: ServiceAccount
+  name: {{ template "nfs-subdir-external-provisioner.serviceAccountName" . }}
+  namespace: {{ .Release.Namespace }} 
+{{- end }}

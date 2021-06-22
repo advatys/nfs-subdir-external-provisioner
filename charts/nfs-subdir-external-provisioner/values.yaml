@@ -66,6 +66,11 @@ rbac:
 podSecurityPolicy:
   enabled: false
 
+# If true, create & use OpenShift's SecurityContextConstraints
+# https://docs.openshift.com/container-platform/4.7/authentication/managing-security-context-constraints.html
+securityContextConstraints:
+    enabled: false
+
 # Deployment pod annotations
 podAnnotations: {}
 
