@@ -42,7 +42,7 @@ rules:
 - apiGroups:
     - security.openshift.io
   resourceNames:
-    - {{ template "nfs-subdir-external-provisioner.fullname" . }}
+    - hostmount-anyuid
   resources:
     - securitycontextconstraints
   verbs:
