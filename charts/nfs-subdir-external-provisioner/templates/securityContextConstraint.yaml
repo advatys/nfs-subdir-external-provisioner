@@ -30,6 +30,7 @@ supplementalGroups:
   type: RunAsAny
 
 volumes:
+- hostPath
 - nfs
 - secret
 ---
