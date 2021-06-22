@@ -55,7 +55,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: {{ template "nfs-subdir-external-provisioner.fullname" . }}
+  name: {{ template "nfs-subdir-external-provisioner.fullname" . }}-scc-use
 subjects:
 - kind: ServiceAccount
   name: {{ template "nfs-subdir-external-provisioner.serviceAccountName" . }}
