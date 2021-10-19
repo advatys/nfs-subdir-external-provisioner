@@ -58,7 +58,7 @@ On OpenShift the service account used to bind volumes does not have the necessar
 ```sh
 # Set the subject of the RBAC objects to the current namespace where the provisioner is being deployed
 $ NAMESPACE=`oc project -q`
-$ sed -i'' "s/namespace:.*/namespace: $NAMESPACE/g" ./deploy/rbac.yaml
+$ sed -i'' "s/namespace:.*/namespace: $NAMESPACE/g" ./deploy/rbac.yaml ./deploy/deployment.yaml
 $ oc create -f deploy/rbac.yaml
 $ oc adm policy add-scc-to-user hostmount-anyuid system:serviceaccount:$NAMESPACE:nfs-client-provisioner
 ```
@@ -206,4 +206,7 @@ The pipeline adds several labels:
 * You also need to provide the `DOCKER_IMAGE` secret specifying your Docker image name, e.g., `quay.io/[username]/nfs-subdir-external-provisioner`.
 
 
-
+## NFS provisioner limitations/pitfalls
+* The provisioned storage is not guaranteed. You may allocate more than the NFS share's total size. The share may also not have enough storage space left to actually accommodate the request.
+* The provisioned storage limit is not enforced. The application can expand to use all the available storage regardless of the provisioned size.
+* Storage resize/expansion operations are not presently supported in any form. You will end up in an error state: `Ignoring the PVC: didn't find a plugin capable of expanding the volume; waiting for an external controller to process this PVC.`
